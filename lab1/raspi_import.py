@@ -1,4 +1,4 @@
- import numpy as np
+import numpy as np
 import sys
 
 
@@ -36,4 +36,4 @@ def raspi_import(path, channels=5):
 # Import data from bin file
 if __name__ == "__main__":
     sample_period, data = raspi_import(sys.argv[1] if len(sys.argv > 1)
-            else 'foo.bin')
+                                       else 'foo.bin')
