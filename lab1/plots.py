@@ -1,15 +1,45 @@
 import csv
 import matplotlib.pyplot as plt
+import numpy as np
 from raspi_import import raspi_import
+
+voltage_ref = 3.3
+bit_resolution = 2**12
+adc_resolution = voltage_ref / bit_resolution
+
+filepath_bin = "lab1/bin/sine.bin"
+filepath_data = "lab1/data/filtermaling2.csv"
+
+
+def timeplot_runner():
+    timeplot(filepath_bin)
 
 
 def timeplot(filepath, channels=5):
     sample_period, data = raspi_import(filepath, channels)
 
-    print(sample_period)
-    print(data)
+    data = data.transpose()  # convert to 5 x 31250 matrix
 
-    return 0
+    time = np.arange(0, (len(data[0]) - 0.5) * sample_period, sample_period)
+
+    # convert raw data to voltage
+    voltage = data * adc_resolution
+    time = time * 1e3  # scale time axis
+
+    fig, axs = plt.subplots(channels, 1, figsize=(10, 8), sharex=True)
+
+    colors = ['b', 'g', 'r', 'c', 'm']  # List of colors for each graph
+
+    for i in range(channels):
+        axs[i].plot(time, voltage[i], color=colors[i])  # Set color for each graph
+        axs[i].set_xlim(0, 10)
+        axs[i].set_ylim(-0.01, 1.1)
+        axs[i].set_xlabel("Time [ms]")
+        axs[i].set_ylabel("Voltage [V]")
+        axs[i].set_title(f"ADC {i+1}")
+
+    plt.tight_layout()
+    plt.show()
 
 
 def bodeplot(filepath):
