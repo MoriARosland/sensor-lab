@@ -16,3 +16,25 @@ def calc_normalized_power_spectrum(data, N_fft):
     S_x_normalized = S_x - np.max(S_x)
 
     return S_x_normalized
+
+
+def calc_fft_windowed(data, N_fft):
+    data_windowed = data * np.hanning(len(data))
+
+    if len(data) < N_fft:
+        data_padded = np.pad(data, (0, N_fft - len(data)), 'constant')
+        data_padded_window = np.pad(data_windowed, (0, N_fft - len(data_windowed)), 'constant')
+    else:
+        data_padded = data
+        data_padded_window = data_windowed
+
+    data_windowed_fft = np.fft.fft(data_windowed, N_fft)
+
+    return data_windowed_fft
+
+
+def generate_freq_array(F_s, N_fft):
+    F_s = F_s / 2
+    N_fft = N_fft // 2
+
+    return np.linspace(0, F_s, N_fft)
