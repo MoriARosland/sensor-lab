@@ -1,5 +1,15 @@
 import csv
 import matplotlib.pyplot as plt
+from raspi_import import raspi_import
+
+
+def timeplot(filepath, channels=5):
+    sample_period, data = raspi_import(filepath, channels)
+
+    print(sample_period)
+    print(data)
+
+    return 0
 
 
 def bodeplot(filepath):
