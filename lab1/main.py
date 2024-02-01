@@ -1,3 +1,6 @@
+import plots as plt
 
-from raspi_import import raspi_import
-from fft import calc_fft_windowed, calc_normalized_power_spectrum, generate_freq_array
+filepath_data = "lab1/data/filtermaling2.csv"
+
+plt.bodeplot(filepath_data)
+plt.timeplot_runner()
