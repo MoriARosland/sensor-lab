@@ -37,6 +37,29 @@ def timeplot(filepath, channels=5):
     plt.show()
 
 
+def spectrum_plot(data, sample_period, title=""):
+    # Credit to Aasmund Nørsett for this function.
+    # GitHub: https://github.com/AasmundN
+
+    NFFT = len(data)
+    Fs = 1 / sample_period
+    df = Fs / NFFT
+
+    f = np.arange(-Fs / 2, Fs / 2, df)
+
+    plt.figure().set_figwidth(12)
+    plt.plot(f, data, linewidth=0.8)
+
+    plt.xlabel("Frequency [Hz]")
+    plt.ylabel("Relative effect [dB]")
+    plt.title(title)
+
+    plt.tight_layout()
+    plt.grid()
+
+    plt.show()
+
+
 def bodeplot(filepath):
     frequencies = []
     channel1_magnitude = []
