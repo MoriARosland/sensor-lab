@@ -8,7 +8,6 @@ bit_resolution = 2**12
 adc_resolution = voltage_ref / bit_resolution
 
 filepath_bin = "lab1/bin/sine.bin"
-filepath_data = "lab1/data/filtermaling2.csv"
 
 
 def timeplot_runner():
