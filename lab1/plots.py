@@ -31,11 +31,7 @@ def timeplot(filepath, channels=5):
 
     for i in range(channels):
         axs[i].plot(time, voltage[i], color=colors[i])  # Set color for each graph
-        axs[i].set_xlim(0, 10)
-        axs[i].set_ylim(-0.01, 1.1)
-        axs[i].set_xlabel("Time [ms]")
-        axs[i].set_ylabel("Voltage [V]")
-        axs[i].set_title(f"ADC {i+1}")
+        axs[i].set(xlim=(0, 10), ylim=(-0.01, 1.1), xlabel="Time [ms]", ylabel="Voltage [V]", title=f"ADC {i+1}")
 
     plt.tight_layout()
     plt.show()
