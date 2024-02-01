@@ -1,5 +1,6 @@
 import plots as plt
 import fft
+import numpy as np
 from raspi_import import raspi_import
 
 filepath_bin = "lab1/bin/sine.bin"
@@ -15,4 +16,9 @@ plt.bodeplot(filepath_data)
 plt.timeplot_runner()
 
 S_x = fft.calc_normalized_power_spectrum(data[0], N_fft)
-plt.spectrum_plot(S_x, sample_period, "Relative Power [dB]")
+plt.spectrum_plot(S_x, sample_period, "Power Spectrum")
+
+X_f = fft.calc_spectrum(data[0], N_fft)
+X_f_hanning = X_f * np.hanning(N_fft)
+
+plt.spectrum_plot(X_f_hanning, sample_period, "Spectrum with Hanning Window")
