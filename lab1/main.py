@@ -3,6 +3,10 @@ import fft
 import numpy as np
 from raspi_import import raspi_import
 
+DC_OFFSET = 0.5
+V_REF = 3.3
+RES = 4096
+
 filepath_bin = "lab1/bin/sine.bin"
 filepath_data = "lab1/data/filtermaling2.csv"
 
@@ -14,6 +18,9 @@ data = data.transpose()
 
 plt.bodeplot(filepath_data)
 plt.timeplot_runner()
+
+dc_offset = DC_OFFSET * RES / V_REF
+data = data - dc_offset
 
 S_x = fft.calc_normalized_power_spectrum(data[0], N_fft)
 plt.spectrum_plot(S_x, sample_period, "Power Spectrum")
