@@ -1,6 +1,7 @@
 import numpy as np
+import random
 
-# Solution to task 1 (forberedelse)
+# Solution to task 1 (preparation task)
 
 SPEED_OF_SOUND = 343
 ARRAY_SPACING = 0.1
@@ -11,20 +12,36 @@ SAMPLE_PERIOD = 1 / Fs
 MAX_DELAY = ARRAY_SPACING / SPEED_OF_SOUND
 MAX_LAG = round(MAX_DELAY / SAMPLE_PERIOD)
 
-x = np.array([1, 2, 3, 4, 5])
-y = np.array([1, 2, 2, 4, 5])
-lags = np.arange(-MAX_LAG, MAX_LAG + 1)
+LAGS = np.arange(0, MAX_LAG + 1)
+SIGNAL_DELAY = random.choice(LAGS)  # Delay in number of samples
+
+f = 10
+omega = 2 * np.pi * f
+
+t = np.arange(0, 1, SAMPLE_PERIOD)
+x = np.sin(omega * t)
+y = np.roll(x, SIGNAL_DELAY)
+y[:SIGNAL_DELAY] = 0  # Setting the rolled samples to 0
 
 
-def crosscorrelation(x, y, lags):
-    corr_values = [np.correlate(x, np.roll(y, lag), mode='full') for lag in lags]
-    return np.array(corr_values)
+def normalized_cross_correlation(x, y, lags):
+    result = np.zeros(len(lags))
+    len_x = len(x)
+
+    auto_corr_x = np.sum(x**2)
+    auto_corr_y = np.sum(y**2)
+    norm_factor = np.sqrt(auto_corr_x * auto_corr_y)
+
+    for i, lag in enumerate(lags):
+        lag_sum = 0
+
+        for n in range(len_x - lag):
+            lag_sum += x[n] * y[n + lag]
+
+        result[i] = lag_sum
+    return result / norm_factor
 
 
-# Compute cross-correlation for all lags
-corr_values = crosscorrelation(x, y, lags)
-
-# Find the absolute maximum of the cross-correlation values
-max_corr_value = np.max(np.abs(corr_values))
-
-print("The absolute value of the largest cross-correlation is:", max_corr_value)
+corr = np.abs(normalized_cross_correlation(x, y, LAGS))
+max_corr_index = np.argmax(corr)  # Index of the maximum value in the correlation array
+print(f"The signals have a maximum correlation when the lag is {max_corr_index} samples")
