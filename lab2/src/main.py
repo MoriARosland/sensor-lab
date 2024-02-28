@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 import os
+import matplotlib.pyplot as plt
 
 from raspi_import import raspi_import
 from triangulation import estimate_angle
@@ -9,7 +10,9 @@ from triangulation import estimate_angle
 
 
 def main():
-    path = "/Users/rosland/development/sensor-lab/lab2/data/randomData/"
+    # path = "/Users/rosland/development/sensor-lab/lab2/data/-90deg/"
+    # path = "/Users/rosland/development/sensor-lab/lab2/data/0deg/"
+    path = "/Users/rosland/development/sensor-lab/lab2/data/180deg/"
 
     if not os.path.isdir(path):
         sample_period, data = raspi_import(path)
@@ -28,7 +31,9 @@ def main():
 
     std = np.std([abs(el) for el in angles])
 
-    print(angles, f"STD: {std}")
+    print(angles)
+    print(f"STD: {std}")
+    print(f"Variance: {std**2}")
 
 
 if __name__ == "__main__":
