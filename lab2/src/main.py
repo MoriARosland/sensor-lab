@@ -1,7 +1,6 @@
 import numpy as np
 import sys
 import os
-import matplotlib.pyplot as plt
 
 from raspi_import import raspi_import
 from triangulation import estimate_angle
