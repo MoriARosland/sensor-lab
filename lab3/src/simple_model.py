@@ -37,7 +37,9 @@ musr = 100 * (17.6*(wavelength/500)**-4 + 18.78*(wavelength/500)**-0.22)
 # mua and musr are now available as shape (3,) arrays
 # Red, green and blue correspond to indexes 0, 1 and 2, respectively
 
-# TODO calculate penetration depth
+
+# Solution task 1a
+
 skin_depth = np.sqrt(1/(3*(musr + mua)*mua))
 
 coefficients = [["Absorption coefficient (Red)", mua[0]],
@@ -53,3 +55,64 @@ penetration_depth = [["Red", skin_depth[0]],
                      ["Blue", skin_depth[2]]]
 
 print(tabulate(penetration_depth, headers=["Color", "Penetration Depth"], tablefmt="grid"))
+
+
+# Solution task 1b
+
+FINGER_THICKNESS = 1.2 * 10**-3  # Meters
+
+
+def calc_transmittance(fingerThickness, mua, musr):
+
+    transmittances = np.zeros(3)
+
+    for i in range(3):
+        C = np.sqrt(3*mua[i]*(musr[i]+mua[i]))
+        transmittances[i] = np.exp(-C*fingerThickness)
+
+    return transmittances
+
+
+transmittance = calc_transmittance(FINGER_THICKNESS, mua, musr)
+
+results = [["Color", "Transmittance through 1.2 cm finger [%]"],
+           ["Red", transmittance[0] * 100],
+           ["Green", transmittance[1] * 100],
+           ["Blue", transmittance[2] * 100]]
+
+print(tabulate(results, headers="firstrow", tablefmt="grid"))
+
+
+# Solution task 1c
+
+def calc_reflectance(mua, musr):
+
+    reflectances = np.zeros(3)
+
+    for i in range(3):
+        reflectances[i] = np.sqrt(3*(musr[i]/mua[i]+1))
+
+    return reflectances
+
+
+reflectance = calc_reflectance(mua, musr)
+relative_reflectance = np.zeros((3, 3))
+
+relative_reflectance[0, 0] = reflectance[0] / reflectance[0]
+relative_reflectance[0, 1] = reflectance[0] / reflectance[1]
+relative_reflectance[0, 2] = reflectance[0] / reflectance[2]
+relative_reflectance[1, 0] = reflectance[1] / reflectance[0]
+relative_reflectance[1, 1] = reflectance[1] / reflectance[1]
+relative_reflectance[1, 2] = reflectance[1] / reflectance[2]
+relative_reflectance[2, 0] = reflectance[2] / reflectance[0]
+relative_reflectance[2, 1] = reflectance[2] / reflectance[1]
+relative_reflectance[2, 2] = reflectance[2] / reflectance[2]
+
+results = [["Color", "Reflectance", "Relative Reflectance (Red)", "Relative Reflectance (Green)", "Relative Reflectance (Blue)"],
+           ["Red", reflectance[0], relative_reflectance[0, 0], relative_reflectance[0, 1], relative_reflectance[0, 2]],
+           ["Green", reflectance[1], relative_reflectance[1, 0], relative_reflectance[1, 1], relative_reflectance[1, 2]],
+           ["Blue", reflectance[2], relative_reflectance[2, 0], relative_reflectance[2, 1], relative_reflectance[2, 2]]
+
+           ]
+
+print(tabulate(results, headers="firstrow", tablefmt="grid"))
