@@ -59,7 +59,7 @@ print(tabulate(penetration_depth, headers=["Color", "Penetration Depth"], tablef
 
 # Solution task 1b
 
-FINGER_THICKNESS = 1.2 * 10**-3  # Meters
+FINGER_THICKNESS = 1.2 * 10**-2  # Meters
 
 
 def calc_transmittance(fingerThickness, mua, musr):
@@ -75,10 +75,10 @@ def calc_transmittance(fingerThickness, mua, musr):
 
 transmittance = calc_transmittance(FINGER_THICKNESS, mua, musr)
 
-results = [["Color", "Transmittance through 1.2 cm finger [%]"],
-           ["Red", transmittance[0] * 100],
-           ["Green", transmittance[1] * 100],
-           ["Blue", transmittance[2] * 100]]
+results = [["Color", "Transmittance through 1.2 cm finger"],
+           ["Red", transmittance[0]],
+           ["Green", transmittance[1]],
+           ["Blue", transmittance[2]]]
 
 print(tabulate(results, headers="firstrow", tablefmt="grid"))
 
