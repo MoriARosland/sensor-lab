@@ -116,3 +116,46 @@ results = [["Color", "Reflectance", "Relative Reflectance (Red)", "Relative Refl
            ]
 
 print(tabulate(results, headers="firstrow", tablefmt="grid"))
+
+
+# Solution task 1d
+
+def calc_mua(bvf, wavelength):
+    mua_blood = (mua_blood_oxy(wavelength)*oxy
+                 + mua_blood_deoxy(wavelength)*(1-oxy))
+    mua = mua_blood*bvf + mua_other
+
+    return mua
+
+
+mua_vein = calc_mua(1, wavelength)
+mua_other_tissue = calc_mua(0.01, wavelength)
+
+VEIN_THICKNESS = 300 * 10**-6  # Meters
+
+transmittance_vein = calc_transmittance(VEIN_THICKNESS, mua_vein, musr)
+transmittance_other_tissue = calc_transmittance(VEIN_THICKNESS, mua_other_tissue, musr)
+
+
+def calc_contrast(T_high, T_low):
+    return (np.abs(T_high - T_low)) / T_low
+
+
+contrast = calc_contrast(transmittance_vein, transmittance_other_tissue)
+
+results = [["Color", "Transmittance through 300 µm vein", "Transmittance through 300 µm other tissue", "Contrast"],
+           ["Red", transmittance_vein[0], transmittance_other_tissue[0], contrast[0]],
+           ["Green", transmittance_vein[1], transmittance_other_tissue[1], contrast[1]],
+           ["Blue", transmittance_vein[2], transmittance_other_tissue[2], contrast[2]]]
+print(tabulate(results, headers="firstrow", tablefmt="grid"))
+
+# Solution task 1e
+
+# Q:
+# Hvilken fargekanal forventer du at vil fungere best til pulsmåling, og hvorfor?
+
+# A:
+# Vi ønsker å velge fargekanalen som gir størst kontrast ved endring av blodvolum.
+# Blå og grønn har nesten identisk kontrast, men grønn har større penetrasjonsdybde.
+# Lyset må munne gi stor konstarst OG nå dypt nok i huden for å nå mer blodfylte områder.
+# Derfor forventes Grønn fargekanal å fungere best til pulsmåling.
