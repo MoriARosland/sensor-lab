@@ -2,8 +2,8 @@ import numpy as np
 from tabulate import tabulate
 
 
-muabo = np.genfromtxt("lab3/data/txt/muabo.txt", delimiter=",")
-muabd = np.genfromtxt("lab3/data/txt/muabd.txt", delimiter=",")
+muabo = np.genfromtxt("lab3/data/coefficient_data/muabo.txt", delimiter=",")
+muabd = np.genfromtxt("lab3/data/coefficient_data/muabd.txt", delimiter=",")
 
 # Wavelengths where color channel sensitivity is highest (determined by camera type)
 red_wavelength = 600
