@@ -1,16 +1,43 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.signal import detrend, butter, filtfilt
+from scipy.fft import fftfreq, fftshift, fft
+
+SAMPLING_RATE = 30  # Hz
+NYQUIST = SAMPLING_RATE / 2
+
+# Heart rate range: 30 - 120 BPM
+CUTOFF_LOW = 0.5  # Hz
+CUTOFF_HIGH = 2.5  # Hz
 
 
-def plot_spectrum(data, N_FFT, Fs):
-    fft_result = np.fft.fft(data, N_FFT)
-    freq = np.fft.fftfreq(N_FFT, 1 / Fs)
+def calc_and_plot_fft(colorData):
+    window = np.hanning(len(colorData))
+    colorData = colorData * window
 
-    print(f'Max frequency at: {freq[np.argmax(np.abs(fft_result))]} Hz')
-    print(f'Heart rate: {freq[np.argmax(np.abs(fft_result))]*60} BPM')
+    colorData = detrend(colorData)
 
-    plt.plot(freq, np.abs(fft_result))
+    f_low = CUTOFF_LOW / NYQUIST
+    f_high = CUTOFF_HIGH / NYQUIST
+    filter_order = 8
+
+    b, a = butter(filter_order, [f_low, f_high], btype='band')
+    filtered_colorData = filtfilt(b, a, colorData)
+
+    NFFT = 4096
+    df = SAMPLING_RATE / NFFT
+
+    X = np.fft.fft(filtered_colorData, NFFT)
+    X = np.fft.fftshift(X)
+
+    freqs = np.arange(-NYQUIST, NYQUIST, df)
+
+    max_freq = freqs[np.argmax(np.abs(X))]
+    print(f'max heartrate: {np.abs(max_freq * 60)} BPM')
+
+    plt.figure()
+    plt.plot(freqs[NFFT//2:], np.abs(X[NFFT//2:]))
+    plt.title('FFT')
     plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Amplitude')
-    plt.title('FFT of Sine Wave')
+    plt.ylabel('Magnitude')
     plt.show()
