@@ -13,7 +13,7 @@ CUTOFF_LOW = 0.5 / NYQUIST  # Hz normalized
 CUTOFF_HIGH = 3 / NYQUIST  # Hz normalized
 
 
-def calc_and_plot_fft(colorData):
+def calc_and_plot_fft(colorData, colorChannel):
     window = hann(len(colorData))
     colorData = colorData * window
     colorData = detrend(colorData)
@@ -37,21 +37,25 @@ def calc_and_plot_fft(colorData):
     spectrum = spectrum[middle: int(middle + top / df)]
     freqs = freqs[middle: int(middle + top / df)]
 
-    pulse = freqs[np.argmax(spectrum)] * 60
-    pulse = round(pulse * 100) / 100
-    print(f'Pulse: {pulse} BPM')
+    heart_rate = freqs[np.argmax(spectrum)] * 60
+    heart_rate = round(heart_rate * 100) / 100
 
-    # plt.figure()
-    # plt.plot(freqs, spectrum)
-    # plt.title('Color Data FFT')
-    # plt.xlabel('Frequency (Hz)')
-    # plt.ylabel('Amplitude (dB)')
-    # plt.show()
+    print(f'Pulse: {heart_rate} BPM')
 
-    return pulse
+    # calc_snr(spectrum, freqs)
+
+    plt.figure()
+    plt.plot(freqs, spectrum)
+    plt.title(f'FFT Channel {colorChannel}')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Amplitude (dB)')
+    plt.show()
+
+    return heart_rate
 
 
 def calc_snr(spectrumData, freqsX):
+    # Reference: hr_reflektans/four.txt
     range_start = np.argmax(spectrumData) - 5000
     range_end = np.argmax(spectrumData) + 5000
 
@@ -68,7 +72,7 @@ def calc_snr(spectrumData, freqsX):
     plt.show()
 
 
-def colorData_timeplot(colorData):
+def colorData_timeplot(colorData, colorChannel):
     colorData = detrend(colorData)
 
     filter_order = 4
@@ -80,7 +84,7 @@ def colorData_timeplot(colorData):
     plt.figure()
     plt.plot(time, colorData)
     plt.plot(time, filtered_colorData)
-    plt.title('Time plot')
+    plt.title(f'Time plot Channel {colorChannel}')
     plt.xlabel('Time (s)')
     plt.ylabel('Amplitude')
     plt.show()
