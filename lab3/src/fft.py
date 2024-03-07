@@ -24,7 +24,7 @@ def calc_and_plot_fft(colorData):
     b, a = butter(filter_order, [f_low, f_high], btype='band')
     filtered_colorData = filtfilt(b, a, colorData)
 
-    NFFT = len(filtered_colorData)
+    NFFT = 2**20
     df = SAMPLING_RATE / NFFT
 
     X = np.fft.fft(filtered_colorData, NFFT)
@@ -40,4 +40,27 @@ def calc_and_plot_fft(colorData):
     plt.title('FFT')
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Magnitude')
+    plt.show()
+
+
+def color_time_plot(colorData):
+    # window = np.hanning(len(colorData))
+    # colorData = colorData * window
+
+    colorData = detrend(colorData)
+
+    f_low = CUTOFF_LOW / NYQUIST
+    f_high = CUTOFF_HIGH / NYQUIST
+    filter_order = 8
+
+    b, a = butter(filter_order, [f_low, f_high], btype='band')
+    filtered_colorData = filtfilt(b, a, colorData)
+
+    time = np.arange(0, len(colorData) / SAMPLING_RATE, 1 / SAMPLING_RATE)
+
+    plt.figure()
+    plt.plot(time, filtered_colorData)
+    plt.title('Time domain')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
     plt.show()
