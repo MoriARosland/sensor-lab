@@ -24,7 +24,7 @@ def calc_and_plot_fft(colorData):
     b, a = butter(filter_order, [f_low, f_high], btype='band')
     filtered_colorData = filtfilt(b, a, colorData)
 
-    NFFT = len(filtered_colorData)
+    NFFT = 2**20
     df = SAMPLING_RATE / NFFT
 
     X = np.fft.fft(filtered_colorData, NFFT)
