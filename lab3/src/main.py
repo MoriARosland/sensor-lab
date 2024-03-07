@@ -30,8 +30,8 @@ def main():
             avg = round(np.mean(heart_rate), 2)
             std = round(np.std([abs(el) for el in heart_rate]), 4)
 
-            print(f"Average HR:{avg}")
-            print(f"Standard deviation from heart rates:{std}")
+            print(f"Average HR: {avg}")
+            print(f"Standard deviation from heart rates: {std}")
     else:
         data = txt_to_numpy_array(path)
 
