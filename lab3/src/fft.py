@@ -55,3 +55,12 @@ def colorData_timeplot(colorData):
 
     b, a = butter(filter_order, [f_low, f_high], btype='band')
     filtered_colorData = filtfilt(b, a, colorData)
+
+    time = np.arange(0, len(colorData) / SAMPLING_RATE, 1/SAMPLING_RATE)
+
+    plt.figure()
+    plt.plot(time, filtered_colorData)
+    plt.title('Color Data')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.show()
