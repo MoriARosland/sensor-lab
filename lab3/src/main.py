@@ -17,7 +17,7 @@ def main():
         for i in range(3):
             print(f'// --- Channel: {COLORS[i]} --- //')
 
-            pulses = [
+            heart_rate = [
                 calc_and_plot_fft(
                     txt_to_numpy_array(f"{path}{file}")[START:END, i], COLORS[i]
                 )
@@ -25,13 +25,13 @@ def main():
                 if file != ".DS_Store"
             ]
 
-            pulses = sorted(pulses)
+            heart_rate = sorted(heart_rate)
 
-            avg = round(np.mean(pulses), 2)
-            std = round(np.std([abs(el) for el in pulses]), 4)
+            avg = round(np.mean(heart_rate), 2)
+            std = round(np.std([abs(el) for el in heart_rate]), 4)
 
-            print(f"Average pulse:{avg}")
-            print(f"Standard deviation from pulses:{std}")
+            print(f"Average HR:{avg}")
+            print(f"Standard deviation from heart rates:{std}")
     else:
         data = txt_to_numpy_array(path)
 

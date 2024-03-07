@@ -8,7 +8,7 @@ NFFT = 2**20
 SAMPLING_FREQ = 40  # Hz
 NYQUIST = SAMPLING_FREQ / 2
 
-# Heart rate range: 30 - 120 BPM
+# Heart rate range: 30 - 180 BPM
 CUTOFF_LOW = 0.5 / NYQUIST  # Hz normalized
 CUTOFF_HIGH = 3 / NYQUIST  # Hz normalized
 
@@ -40,16 +40,16 @@ def calc_and_plot_fft(colorData, colorChannel):
     heart_rate = freqs[np.argmax(spectrum)] * 60
     heart_rate = round(heart_rate * 100) / 100
 
-    print(f'Pulse: {heart_rate} BPM')
+    print(f'Heart rate: {heart_rate} BPM')
 
     # calc_snr(spectrum, freqs)
 
-    plt.figure()
-    plt.plot(freqs, spectrum)
-    plt.title(f'FFT Channel {colorChannel}')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Amplitude (dB)')
-    plt.show()
+    # plt.figure()
+    # plt.plot(freqs, spectrum)
+    # plt.title(f'FFT Channel {colorChannel}')
+    # plt.xlabel('Frequency (Hz)')
+    # plt.ylabel('Amplitude (dB)')
+    # plt.show()
 
     return heart_rate
 
