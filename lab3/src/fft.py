@@ -41,3 +41,17 @@ def calc_and_plot_fft(colorData):
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Magnitude')
     plt.show()
+
+
+def colorData_timeplot(colorData):
+    window = np.hanning(len(colorData))
+    colorData = colorData * window
+
+    colorData = detrend(colorData)
+
+    f_low = CUTOFF_LOW / NYQUIST
+    f_high = CUTOFF_HIGH / NYQUIST
+    filter_order = 8
+
+    b, a = butter(filter_order, [f_low, f_high], btype='band')
+    filtered_colorData = filtfilt(b, a, colorData)
