@@ -10,9 +10,9 @@ COLORS = ["Red", "Green", "Blue"]
 
 
 def main():
-    # path = "lab3/data/hr_reflektans/"
+    path = "lab3/data/hr_reflektans/"
     # path = "lab3/data/hr_transmittans/one.txt"
-    path = "lab3/data/panne.txt"
+    # path = "lab3/data/panne.txt"
 
     if os.path.isdir(path):
         for i in range(3):
