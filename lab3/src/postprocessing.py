@@ -28,7 +28,8 @@ def calc_and_plot_fft(colorData, colorChannel):
     df = SAMPLING_FREQ / NFFT
     freqs = np.arange(-NYQUIST, NYQUIST, df)
 
-    spectrum = spectrum = 20 * np.log10(abs(colorData_fft) / max(abs(colorData_fft)))
+    # spectrum = spectrum = 20 * np.log10(abs(colorData_fft) / max(abs(colorData_fft)))  # Use this for plotting
+    spectrum = abs(colorData_fft)  # Use this for SNR calculation
 
     middle = int(NFFT / 2)
     top = 5
@@ -42,7 +43,7 @@ def calc_and_plot_fft(colorData, colorChannel):
 
     print(f'Heart rate: {heart_rate} BPM')
 
-    # calc_snr(spectrum, freqs)
+    calc_snr(spectrum, freqs)
 
     # plt.figure()
     # plt.plot(freqs, spectrum)
@@ -59,8 +60,8 @@ def calc_snr(spectrumData, freqsX):
     range_start = np.argmax(spectrumData) - 5000
     range_end = np.argmax(spectrumData) + 5000
 
-    SNR = np.sum(spectrumData[range_start:range_end]) / (
-        np.sum(spectrumData[:range_start]) + np.sum(spectrumData[range_end:])
+    SNR = 2*np.mean(spectrumData[range_start:range_end]) / (
+        np.mean(spectrumData[:range_start]) + np.mean(spectrumData[range_end:])
     )
 
     print(f'SNR: {SNR}')
