@@ -20,7 +20,8 @@ def main():
 
             heart_rate = [
                 calc_and_plot_fft(
-                    txt_to_numpy_array(f"{path}{file}")[START:END, i], COLORS[i]
+                    txt_to_numpy_array(f"{path}{file}")[
+                        START:END, i], COLORS[i]
                 )
                 for file in os.listdir(path)
                 if file != ".DS_Store"
@@ -36,9 +37,20 @@ def main():
     else:
         data = txt_to_numpy_array(path)
 
+        heart_rate = []
+        std = 0
+
         for i in range(3):
-            calc_and_plot_fft(data[START:END, i], COLORS[i])
+            hr_res = calc_and_plot_fft(data[START:END, i], COLORS[i])
             colorData_timeplot(data[START:END, i], COLORS[i])
+
+            heart_rate.append(hr_res)
+
+        avg = round(np.mean(heart_rate), 2)
+        std = round(np.std([abs(el) for el in heart_rate]), 4)
+
+        print(f"Average HR: {avg}")
+        print(f"Standard deviation from heart rates: {std}")
 
 
 if __name__ == "__main__":
